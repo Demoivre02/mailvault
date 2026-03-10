@@ -14,23 +14,33 @@ interface Message {
   content: string
 }
 
-const suggestedQuestions = [
-  "When is this due?",
-  "Do I need to pay this?",
-  "Is this important?",
-  "What actions should I take?",
-]
-
 interface AIChatProps {
-  documentTitle: string
-  documentSummary: string
+  /** Controlled value for the input field (optional) */
+  input?: string
+  /** Called when the user types or the input should update */
+  onInputChange?: (value: string) => void
+  /** Legacy props kept for backward compatibility (mail detail view) */
+  documentTitle?: string
+  documentSummary?: string
 }
 
-export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
+export function AIChat({ input: externalInput, onInputChange, documentTitle = "MailVault Assistant", documentSummary = "Ask a question about your mail and I'll keep the answer simple." }: AIChatProps) {
   const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState("")
+  const [internalInput, setInternalInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
+
+  // Use externally controlled input when provided, otherwise use internal state
+  const isControlled = externalInput !== undefined
+  const input = isControlled ? externalInput : internalInput
+
+  const setInput = (value: string) => {
+    if (isControlled) {
+      onInputChange?.(value)
+    } else {
+      setInternalInput(value)
+    }
+  }
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -52,7 +62,7 @@ export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
     setInput("")
     setIsLoading(true)
 
-    // Simulate AI response
+    // Simulate AI response — replace with real API call
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
     const responses: Record<string, string> = {
@@ -60,59 +70,35 @@ export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
       "do i need to pay this?": `Yes, this is an invoice that requires payment. The amount due is $142.50. You can typically pay this through the utility company's online portal, by mail, or through your bank's bill pay service.`,
       "is this important?": `Yes, this document is important. It's a utility bill that requires action before the due date to avoid late fees or service interruption. I've flagged it as urgent in your dashboard.`,
       "what actions should i take?": `Based on my analysis, here are the recommended actions:\n\n1. Review the charges to ensure accuracy\n2. Set up payment before March 25, 2026\n3. Consider enrolling in autopay to avoid missing future payments\n4. File this document in your Bills folder for tax purposes`,
+      "what bills are due this week?": `You have 2 bills due this week:\n\n1. **Electric bill** — $142.50 due March 12\n2. **Internet service** — $79.99 due March 14\n\nWould you like help setting up reminders or finding payment links?`,
+      "do i have any documents i need to sign?": `I found 1 document that may require your signature:\n\n- **Lease renewal agreement** received March 8 — review required before March 20.\n\nWould you like me to flag it on your dashboard?`,
+      "summarize all important mail from this month.": `Here's a summary of important mail received in March:\n\n- **Lease renewal** (March 8) — Requires signature by March 20\n- **Electric bill** (March 9) — $142.50 due March 12\n- **Health insurance EOB** (March 10) — No action required\n- **Internet bill** (March 11) — $79.99 due March 14`,
+      "which documents mention insurance or medical?": `I found 2 documents mentioning insurance or medical topics:\n\n1. **Health insurance EOB** (March 10) — Summary of benefits, no payment needed\n2. **Doctor's office statement** (February 28) — $35 copay, likely already processed`,
     }
 
-    const defaultResponse = `Based on my analysis of "${documentTitle}", I can help you understand this document better. ${documentSummary} Is there anything specific you'd like to know about this document?`
+    const defaultResponse = `Based on my analysis of "${documentTitle}", I can help you understand this document better. ${documentSummary} Is there anything specific you'd like to know?`
 
     const aiMessage: Message = {
       id: Math.random().toString(36).substring(7),
       role: "assistant",
-      content: responses[input.toLowerCase()] || defaultResponse,
+      content: responses[userMessage.content.toLowerCase()] || defaultResponse,
     }
 
     setMessages((prev) => [...prev, aiMessage])
     setIsLoading(false)
   }
 
-  const handleSuggestionClick = (question: string) => {
-    setInput(question)
-  }
-
   return (
-    <Card className="flex max-h-[75vh] flex-col border-[#d1dde6] bg-white shadow-sm md:h-[500px]">
-      <div className="flex items-center gap-2 border-b border-[#d1dde6] p-3 md:p-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#9CD5FF]/30">
-          <Sparkles className="h-4 w-4 text-[#7AAACE]" />
-        </div>
-        <div>
-          <h3 className="text-sm font-medium text-[#355872]">Ask AI</h3>
-          <p className="text-xs text-[#5a7a94]">
-            Get answers about this document
-          </p>
-        </div>
-      </div>
-
-      <ScrollArea className="flex-1 p-3 md:p-4" ref={scrollAreaRef}>
+    <Card className="flex flex-col border-[#d1dde6] bg-white shadow-sm" style={{ minHeight: "420px", maxHeight: "68vh" }}>
+      {/* Messages area */}
+      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
         {messages.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center text-center">
+          <div className="flex h-full flex-col items-center justify-center py-12 text-center">
             <Sparkles className="h-10 w-10 text-[#7AAACE]/50" />
-            <h4 className="mt-4 font-medium text-[#355872]">Ask anything about this document</h4>
+            <h4 className="mt-4 font-medium text-[#355872]">Ask anything about your mail</h4>
             <p className="mt-1 text-sm text-[#5a7a94]">
-              I can help you understand due dates, payments, and required actions.
+              Choose a prompt above or type your own question below.
             </p>
-            <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-wrap sm:flex-row sm:justify-center">
-              {suggestedQuestions.map((question) => (
-                <Button
-                  key={question}
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-center border-[#d1dde6] text-xs text-[#355872] hover:bg-[#9CD5FF]/20 sm:w-auto sm:justify-start"
-                  onClick={() => handleSuggestionClick(question)}
-                >
-                  {question}
-                </Button>
-              ))}
-            </div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -161,16 +147,22 @@ export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
         )}
       </ScrollArea>
 
+      {/* Input bar */}
       <form onSubmit={handleSubmit} className="border-t border-[#d1dde6] p-3 md:p-4">
         <div className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a question about this document..."
-            className="flex-1 md:w-full w-[350px] border-[#d1dde6] bg-[#F7F8F0] text-[#355872] placeholder:text-[#5a7a94] md:text-sm text-xs"
+            placeholder="Ask a question about your mail…"
+            className="flex-1 border-[#d1dde6] bg-[#F7F8F0] text-sm text-[#355872] placeholder:text-[#5a7a94]"
             disabled={isLoading}
           />
-          <Button type="submit" size="icon" disabled={!input.trim() || isLoading} className="bg-[#355872] text-[#F7F8F0] hover:bg-[#456b85]">
+          <Button
+            type="submit"
+            size="icon"
+            disabled={!input.trim() || isLoading}
+            className="bg-[#355872] text-[#F7F8F0] hover:bg-[#456b85]"
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>
