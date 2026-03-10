@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileText, Clock, AlertCircle, CheckCircle } from "lucide-react"
 
@@ -11,6 +12,7 @@ const stats = [
     icon: FileText,
     iconColor: "text-[#355872]",
     bgColor: "bg-[#9CD5FF]/30",
+    href: "/mail",
   },
   {
     title: "Pending Actions",
@@ -19,6 +21,7 @@ const stats = [
     icon: Clock,
     iconColor: "text-[#7AAACE]",
     bgColor: "bg-[#7AAACE]/20",
+    href: "/mail?filter=pending",
   },
   {
     title: "Bills Due",
@@ -27,6 +30,7 @@ const stats = [
     icon: AlertCircle,
     iconColor: "text-[#e97451]",
     bgColor: "bg-[#e97451]/20",
+    href: "/mail?filter=bills",
   },
   {
     title: "Processed Today",
@@ -35,6 +39,7 @@ const stats = [
     icon: CheckCircle,
     iconColor: "text-[#88b04b]",
     bgColor: "bg-[#88b04b]/20",
+    href: "/mail?filter=recent",
   },
 ]
 
@@ -42,20 +47,22 @@ export function StatsCards() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
-        <Card key={stat.title} className="border-[#d1dde6] bg-white shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[#5a7a94]">
-              {stat.title}
-            </CardTitle>
-            <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${stat.bgColor}`}>
-              <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-[#355872]">{stat.value}</div>
-            <p className="text-xs text-[#5a7a94]">{stat.change}</p>
-          </CardContent>
-        </Card>
+        <Link key={stat.title} href={stat.href} className="group block">
+          <Card className="border-[#d1dde6] bg-white shadow-sm transition-colors group-hover:border-[#9CD5FF] group-hover:bg-[#F7F8F0]">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-[#5a7a94]">
+                {stat.title}
+              </CardTitle>
+              <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${stat.bgColor}`}>
+                <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-[#355872]">{stat.value}</div>
+              <p className="text-xs text-[#5a7a94]">{stat.change}</p>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
   )

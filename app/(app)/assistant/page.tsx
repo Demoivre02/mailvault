@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react"
 import { Navigation } from "@/components/navigation"
 import { AIChat } from "@/components/mail/ai-chat"
-import { MailList } from "@/components/mail/mail-list"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -23,13 +22,11 @@ export default function AssistantPage() {
     summary: string
   } | null>(null)
 
-  // For now we derive a generic summary from the current query;
-  // in a real app this would come from the backend based on the user’s documents.
   const derivedSummary = useMemo(() => {
     if (!globalQuery.trim()) {
-      return "I’ll search across all of your uploaded mail and documents to answer in plain language."
+      return "Ask a question about your mail and I’ll keep the answer simple."
     }
-    return `I’m searching across your digitized mail and documents for anything related to “${globalQuery}” and will surface key dates, amounts, and required actions.`
+    return `I’m looking through your mail for anything related to “${globalQuery}”.`
   }, [globalQuery])
 
   const activeTitle =
@@ -57,8 +54,7 @@ export default function AssistantPage() {
               Assistant
             </h1>
             <p className="mt-1 max-w-xl text-sm text-[#5a7a94] sm:text-base">
-              Ask questions across all of your uploaded mail and documents. I’ll use OCR and AI
-              summaries to find what matters.
+              Ask a question about your mail and I’ll help you find clear answers.
             </p>
           </div>
           <Card className="w-full max-w-md border-[#d1dde6] bg-white p-2 shadow-sm sm:p-3">
@@ -75,7 +71,7 @@ export default function AssistantPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)]">
-          {/* Left: context + document explorer */}
+          {/* Left: assistant context and suggestions */}
           <div className="order-2 space-y-4 lg:order-1 lg:space-y-6">
             <Card className="border-[#d1dde6] bg-white p-3 shadow-sm sm:p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
@@ -88,8 +84,7 @@ export default function AssistantPage() {
                       MailVault Assistant
                     </h2>
                     <p className="mt-1 text-xs text-[#5a7a94] sm:text-sm">
-                      Choose a document or ask a broad question. I’ll answer based on your uploaded
-                      mail.
+                      Start with a quick question or pick a suggested prompt to get going.
                     </p>
                   </div>
                 </div>
@@ -118,23 +113,7 @@ export default function AssistantPage() {
               </div>
             </Card>
 
-            <Card className="border-[#d1dde6] bg-white p-3 shadow-sm sm:p-4">
-              <div className="mb-3 flex items-center justify-between gap-2 sm:mb-4">
-                <div>
-                  <h3 className="text-sm font-semibold text-[#355872]">
-                    Your documents
-                  </h3>
-                  <p className="text-xs text-[#5a7a94]">
-                    Click any document to drill in; the assistant will use it as context.
-                  </p>
-                </div>
-              </div>
-
-              {/* Reuse existing mail list UI as the “document explorer” */}
-              <div className="mt-2">
-                <MailList />
-              </div>
-            </Card>
+            {/* Document explorer removed to keep the assistant focused on Q&A */}
           </div>
 
           {/* Right: global assistant chat */}

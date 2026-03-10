@@ -12,10 +12,15 @@ import {
   Menu,
   LogOut,
   MessageSquare,
+  Bell,
+  Clock,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Badge } from "@/components/ui/badge"
+import { mockMail } from "@/components/mail/mail-list"
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -68,6 +73,20 @@ function NavLinks({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate
 
 export function Navigation() {
   const [open, setOpen] = useState(false)
+
+  const pendingActions = useMemo(
+    () =>
+      mockMail
+        .filter((mail) => mail.urgent || !!mail.dueDate)
+        .map((mail) => ({
+          id: mail.id,
+          title: mail.title,
+          summary: mail.summary,
+          due: mail.dueDate ?? mail.date,
+          href: `/mail/${mail.id}`,
+        })),
+    []
+  )
   
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#d1dde6]/50 bg-[#F7F8F0]/80 backdrop-blur-xl">
@@ -80,9 +99,75 @@ export function Navigation() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="hidden text-[#5a7a94] hover:text-[#355872] md:flex">
-            <Settings className="h-5 w-5" />
-            <span className="sr-only">Settings</span>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative hidden text-[#5a7a94] hover:text-[#355872] md:flex"
+              >
+                <Bell className="h-5 w-5" />
+                {pendingActions.length > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#e97451] px-1 text-[10px] font-medium text-white">
+                    {pendingActions.length}
+                  </span>
+                )}
+                <span className="sr-only">Notifications</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-80 border-[#d1dde6] bg-white">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-sm font-medium text-[#355872]">Pending actions</p>
+                <Badge
+                  variant="outline"
+                  className="border-[#d1dde6] bg-[#F7F8F0] text-xs text-[#5a7a94]"
+                >
+                  {pendingActions.length} open
+                </Badge>
+              </div>
+              <div className="space-y-2">
+                {pendingActions.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className="block rounded-md border border-transparent p-2 hover:border-[#d1dde6] hover:bg-[#F7F8F0]"
+                  >
+                    <div className="flex items-start gap-2">
+                      <div className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-md bg-[#9CD5FF]/40">
+                        <Clock className="h-3.5 w-3.5 text-[#355872]" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-xs font-medium text-[#355872]">
+                          {item.title}
+                        </p>
+                        <p className="mt-0.5 line-clamp-2 text-[11px] text-[#5a7a94]">
+                          {item.summary}
+                        </p>
+                        <p className="mt-1 text-[11px] font-medium text-[#e97451]">
+                          Due {item.due}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-3 flex justify-end">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2 text-xs text-[#355872] hover:bg-[#9CD5FF]/20"
+                  asChild
+                >
+                  <Link href="/mail?filter=pending">View all pending</Link>
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <Button variant="ghost" size="icon" asChild className="hidden text-[#5a7a94] hover:text-[#355872] md:flex">
+            <Link href="/settings">
+              <Settings className="h-5 w-5" />
+              <span className="sr-only">Settings</span>
+            </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild className="hidden text-[#5a7a94] hover:text-[#355872] md:flex">
             <Link href="/">
@@ -103,6 +188,14 @@ export function Navigation() {
                 <Logo />
                 <NavLinks mobile onNavigate={() => setOpen(false)} />
                 <div className="mt-auto flex flex-col gap-2 border-t border-[#d1dde6] pt-4">
+                  <Link 
+                    href="/settings" 
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#5a7a94] hover:bg-[#9CD5FF]/20 hover:text-[#355872]"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Settings className="h-4 w-4" />
+                    Settings
+                  </Link>
                   <Link 
                     href="/" 
                     className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#5a7a94] hover:bg-[#9CD5FF]/20 hover:text-[#355872]"

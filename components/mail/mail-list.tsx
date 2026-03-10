@@ -46,7 +46,7 @@ const categoryColors: Record<string, string> = {
 }
 
 // Mock data
-const mockMail = [
+export const mockMail = [
   {
     id: "1",
     title: "Electric Bill - March 2026",
@@ -209,7 +209,7 @@ export function MailList() {
 
       {/* Mail items */}
       {viewMode === "list" ? (
-        <div className="space-y-2 my-2">
+        <div className="space-y-3 my-2">
           {filteredMail.map((mail) => (
             <MailListItem key={mail.id} mail={mail} />
           ))}
@@ -242,7 +242,7 @@ interface MailItemProps {
 function MailListItem({ mail }: MailItemProps) {
   return (
     <Link href={`/mail/${mail.id}`}>
-      <Card className="group border-[#d1dde6] bg-white p-4 shadow-sm transition-colors hover:border-[#7AAACE] hover:bg-[#9CD5FF]/5">
+      <Card className="group border-[#d1dde6] mt-2 bg-white p-4 shadow-sm transition-colors hover:border-[#7AAACE] hover:bg-[#9CD5FF]/5">
         <div className="flex items-start gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#9CD5FF]/30">
             <FileText className="h-5 w-5 text-[#355872]" />

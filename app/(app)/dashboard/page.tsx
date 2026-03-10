@@ -1,17 +1,33 @@
+"use client"
+
+import { useMemo } from "react"
 import { Navigation } from "@/components/navigation"
 import { StatsCards } from "@/components/dashboard/stats-cards"
 import { RecentMail } from "@/components/dashboard/recent-mail"
 import { QuickActions } from "@/components/dashboard/quick-actions"
 
+function getGreeting() {
+  const hour = new Date().getHours()
+
+  if (hour < 12) return "Good morning"
+  if (hour < 18) return "Good afternoon"
+  return "Good evening"
+}
+
 export default function DashboardPage() {
+  const greeting = useMemo(() => getGreeting(), [])
+  const userName = "Alex"
+
   return (
     <div className="min-h-screen bg-[#F7F8F0]">
       <Navigation />
       <main className="mx-auto md:max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-[#355872]">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#355872]">
+            {greeting}, {userName}
+          </h1>
           <p className="mt-1 text-[#5a7a94]">
-            Welcome back. Here&apos;s an overview of your mail.
+            Welcome back to your MailVault dashboard. Here&apos;s an overview of what&apos;s happening in your mail.
           </p>
         </div>
         
