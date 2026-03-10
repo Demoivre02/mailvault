@@ -1,3 +1,5 @@
+ "use client"
+
 import { Navigation } from "@/components/navigation"
 import { MailDetail, mockMailData } from "@/components/mail/mail-detail"
 import { AIChat } from "@/components/mail/ai-chat"
@@ -6,11 +8,11 @@ import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: { id: string }
 }
 
-export default async function MailDetailPage({ params }: PageProps) {
-  const { id } = await params
+export default function MailDetailPage({ params }: PageProps) {
+  const { id } = params
   const mail = mockMailData[id] || mockMailData["1"]
 
   return (

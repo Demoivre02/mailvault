@@ -20,6 +20,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/upload", label: "Upload", icon: Upload },
   { href: "/mail", label: "My Mail", icon: FolderOpen },
+  { href: "/assistant", label: "Assistant", icon: MessageSquare },
 ]
 
 function Logo() {
