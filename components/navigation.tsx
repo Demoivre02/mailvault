@@ -104,7 +104,7 @@ export function Navigation() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hidden text-[#5a7a94] hover:text-[#355872] md:flex"
+                className="relative text-[#5a7a94] hover:text-[#355872]"
               >
                 <Bell className="h-5 w-5" />
                 {pendingActions.length > 0 && (
