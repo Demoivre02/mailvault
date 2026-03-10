@@ -32,8 +32,8 @@ export default async function MailDetailPage({ params }: PageProps) {
           </div>
           <div className="lg:sticky lg:top-24 lg:self-start">
             <AIChat 
-              documentTitle={mail.title} 
-              documentSummary={mail.summary}
+              documentTitle={mail?.title} 
+              documentSummary={mail?.summary}
             />
           </div>
         </div>

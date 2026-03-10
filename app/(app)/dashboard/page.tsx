@@ -7,7 +7,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#F7F8F0]">
       <Navigation />
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto md:max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-[#355872]">Dashboard</h1>
           <p className="mt-1 text-[#5a7a94]">
@@ -18,7 +18,7 @@ export default function DashboardPage() {
         <div className="space-y-8">
           <StatsCards />
           
-          <div className="grid gap-8 lg:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-3 grid-cols-1">
             <div className="lg:col-span-2">
               <RecentMail />
             </div>

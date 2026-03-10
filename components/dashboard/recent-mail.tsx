@@ -61,8 +61,8 @@ const recentMail = [
 
 export function RecentMail() {
   return (
-    <Card className="border-[#d1dde6] bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="border-[#d1dde6] md:w-full w-[100%]  bg-white shadow-sm ">
+      <CardHeader className="flex flex-row items-center w-[400px] justify-between">
         <CardTitle className="text-[#355872]">Recent Mail</CardTitle>
         <Button variant="ghost" size="sm" asChild>
           <Link href="/mail" className="flex items-center gap-1 text-[#7AAACE] hover:text-[#355872]">
@@ -76,15 +76,15 @@ export function RecentMail() {
           <Link
             key={mail.id}
             href={`/mail/${mail.id}`}
-            className="group flex items-start gap-4 rounded-lg border border-transparent p-3 transition-colors hover:border-[#d1dde6] hover:bg-[#F7F8F0]"
+            className="group flex b flex-col md:flex-row items-start gap-4 rounded-lg border border-transparent p-3 transition-colors hover:border-[#d1dde6] hover:bg-[#F7F8F0]"
           >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#9CD5FF]/30">
               <FileText className="h-5 w-5 text-[#355872]" />
             </div>
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 w-full flex flex-col md:flex-row justify-between border-b border-gray-200 pb-2">
               <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
+                <div className="min-w-0  md:flex-1">
+                  <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
                     <h4 className="truncate font-medium text-[#355872] group-hover:text-[#7AAACE]">
                       {mail.title}
                     </h4>
@@ -92,13 +92,15 @@ export function RecentMail() {
                       <span className="flex h-2 w-2 shrink-0 rounded-full bg-[#e97451]" />
                     )}
                   </div>
-                  <p className="mt-1 truncate text-sm text-[#5a7a94]">
+                  <p className="mt-1 truncate text-sm text-[#5a7a94] ">
                     {mail.summary}
                   </p>
                 </div>
-                <Badge variant="outline" className={categoryColors[mail.category]}>
-                  {mail.category}
-                </Badge>
+                <div className="md:w-fit w-full ml-[7em] items-end justify-end">
+                  <Badge variant="outline" className={categoryColors[mail.category]} >
+                    {mail.category}
+                  </Badge>
+                </div>
               </div>
               <p className="mt-2 text-xs text-[#5a7a94]">{mail.date}</p>
             </div>

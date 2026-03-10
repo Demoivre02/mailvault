@@ -79,8 +79,8 @@ export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
   }
 
   return (
-    <Card className="flex h-[500px] flex-col border-[#d1dde6] bg-white shadow-sm">
-      <div className="flex items-center gap-2 border-b border-[#d1dde6] p-4">
+    <Card className="flex max-h-[75vh] flex-col border-[#d1dde6] bg-white shadow-sm md:h-[500px]">
+      <div className="flex items-center gap-2 border-b border-[#d1dde6] p-3 md:p-4">
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#9CD5FF]/30">
           <Sparkles className="h-4 w-4 text-[#7AAACE]" />
         </div>
@@ -92,7 +92,7 @@ export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
         </div>
       </div>
 
-      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+      <ScrollArea className="flex-1 p-3 md:p-4" ref={scrollAreaRef}>
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center">
             <Sparkles className="h-10 w-10 text-[#7AAACE]/50" />
@@ -100,13 +100,13 @@ export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
             <p className="mt-1 text-sm text-[#5a7a94]">
               I can help you understand due dates, payments, and required actions.
             </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-2">
+            <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-wrap sm:flex-row sm:justify-center">
               {suggestedQuestions.map((question) => (
                 <Button
                   key={question}
                   variant="outline"
                   size="sm"
-                  className="border-[#d1dde6] text-xs text-[#355872] hover:bg-[#9CD5FF]/20"
+                  className="w-full justify-center border-[#d1dde6] text-xs text-[#355872] hover:bg-[#9CD5FF]/20 sm:w-auto sm:justify-start"
                   onClick={() => handleSuggestionClick(question)}
                 >
                   {question}
@@ -161,13 +161,13 @@ export function AIChat({ documentTitle, documentSummary }: AIChatProps) {
         )}
       </ScrollArea>
 
-      <form onSubmit={handleSubmit} className="border-t border-[#d1dde6] p-4">
+      <form onSubmit={handleSubmit} className="border-t border-[#d1dde6] p-3 md:p-4">
         <div className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask a question about this document..."
-            className="flex-1 border-[#d1dde6] bg-[#F7F8F0] text-[#355872] placeholder:text-[#5a7a94]"
+            className="flex-1 md:w-full w-[350px] border-[#d1dde6] bg-[#F7F8F0] text-[#355872] placeholder:text-[#5a7a94] md:text-sm text-xs"
             disabled={isLoading}
           />
           <Button type="submit" size="icon" disabled={!input.trim() || isLoading} className="bg-[#355872] text-[#F7F8F0] hover:bg-[#456b85]">

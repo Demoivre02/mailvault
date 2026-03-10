@@ -150,9 +150,9 @@ export function MailList() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6  ">
       {/* Filters */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between ">
         <div className="flex flex-1 gap-3">
           <div className="relative max-w-sm flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5a7a94]" />
@@ -178,12 +178,12 @@ export function MailList() {
           </Select>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ">
           <Button
             variant={viewMode === "list" ? "secondary" : "ghost"}
             size="icon"
             onClick={() => setViewMode("list")}
-            className={viewMode === "list" ? "bg-[#9CD5FF]/30 text-[#355872]" : "text-[#5a7a94]"}
+            className={viewMode === "list" ? "bg-[#9CD5FF]/30 text-[#355872]" : "md:text-sm text-xs text-[#5a7a94]"}
           >
             <List className="h-4 w-4" />
           </Button>
@@ -191,7 +191,7 @@ export function MailList() {
             variant={viewMode === "grid" ? "secondary" : "ghost"}
             size="icon"
             onClick={() => setViewMode("grid")}
-            className={viewMode === "grid" ? "bg-[#9CD5FF]/30 text-[#355872]" : "text-[#5a7a94]"}
+            className={viewMode === "grid" ? "bg-[#9CD5FF]/30 text-[#355872]" : "md:text-sm text-xs text-[#5a7a94]"}
           >
             <Grid className="h-4 w-4" />
           </Button>
@@ -199,7 +199,7 @@ export function MailList() {
       </div>
 
       {/* Results count */}
-      <div className="flex items-center justify-between text-sm text-[#5a7a94]">
+      <div className="flex items-center justify-between md:text-sm text-xs text-[#5a7a94] ">
         <span>{filteredMail.length} documents</span>
         <Button variant="ghost" size="sm" className="gap-1 text-[#5a7a94] hover:text-[#355872]">
           <SortAsc className="h-4 w-4" />
@@ -209,13 +209,13 @@ export function MailList() {
 
       {/* Mail items */}
       {viewMode === "list" ? (
-        <div className="space-y-2">
+        <div className="space-y-2 my-2">
           {filteredMail.map((mail) => (
             <MailListItem key={mail.id} mail={mail} />
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 my-2">
           {filteredMail.map((mail) => (
             <MailGridItem key={mail.id} mail={mail} />
           ))}
@@ -225,8 +225,8 @@ export function MailList() {
       {filteredMail.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <FileText className="h-12 w-12 text-[#5a7a94]/50" />
-          <h3 className="mt-4 text-lg font-semibold text-[#355872]">No documents found</h3>
-          <p className="mt-1 text-sm text-[#5a7a94]">
+          <h3 className="mt-4 md:text-lg text-sm font-semibold text-[#355872]">No documents found</h3>
+          <p className="mt-1 md:text-sm text-xs text-[#5a7a94]">
             Try adjusting your search or filter criteria.
           </p>
         </div>
@@ -286,9 +286,9 @@ function MailListItem({ mail }: MailItemProps) {
 
 function MailGridItem({ mail }: MailItemProps) {
   return (
-    <Link href={`/mail/${mail.id}`}>
-      <Card className="group h-full border-[#d1dde6] bg-white p-4 shadow-sm transition-colors hover:border-[#7AAACE] hover:bg-[#9CD5FF]/5">
-        <div className="flex items-start justify-between">
+    <Link href={`/mail/${mail.id}`} >
+      <Card className="group h-full border-[#d1dde6]  bg-white p-4 shadow-sm transition-colors hover:border-[#7AAACE] hover:bg-[#9CD5FF]/5">
+        <div className="flex items-start justify-between ">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#9CD5FF]/30">
             <FileText className="h-5 w-5 text-[#355872]" />
           </div>
@@ -298,7 +298,7 @@ function MailGridItem({ mail }: MailItemProps) {
         </div>
         <div className="mt-4">
           <div className="flex items-center gap-2">
-            <h3 className="line-clamp-1 font-medium text-[#355872] group-hover:text-[#7AAACE]">
+            <h3 className="line-clamp-1 md:font-medium font-normal text-[#355872] text-xs md:text-sm group-hover:text-[#7AAACE]">
               {mail.title}
             </h3>
             {mail.urgent && (
